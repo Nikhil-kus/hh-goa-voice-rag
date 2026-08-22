@@ -70,7 +70,7 @@ class Settings(BaseSettings):
     # ── App ───────────────────────────────────────────────────────────────────
     app_env: str = "development"
     log_level: str = "INFO"
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3000,https://hh-goa-voice-rag-frontend.vercel.app"
 
     # ── Computed helpers ──────────────────────────────────────────────────────
     @property
