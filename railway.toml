@@ -1,9 +1,8 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "cd backend && pip install -r requirements.txt && python -c \"import nltk; nltk.download('punkt_tab', quiet=True)\""
 
 [deploy]
-startCommand = "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
 healthcheckPath = "/health"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
