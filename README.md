@@ -135,14 +135,55 @@ Open http://localhost:3000
 
 ---
 
-## Docker (production)
+## Docker (local full stack)
 
 ```bash
 docker compose up --build
 ```
 
 The Qdrant data directory (`backend/qdrant_data/`) is mounted as a volume.
-Pre-index locally, then deploy with the populated volume.
+Pre-index locally (`python scripts/ingest.py`), then run the stack.
+
+---
+
+## Production Deployment (Railway + Qdrant Cloud + Vercel)
+
+### Step 1 — Qdrant Cloud (free tier)
+1. Sign up at https://cloud.qdrant.io
+2. Create a free cluster (1GB)
+3. Note the cluster URL and API key
+
+### Step 2 — Build the index against Qdrant Cloud
+```bash
+# Set these in backend/.env
+USE_QDRANT_LOCAL=false
+QDRANT_HOST=your-cluster.qdrant.io
+QDRANT_PORT=6333
+QDRANT_API_KEY=your_qdrant_api_key
+
+# Run ingestion (uploads to cloud)
+python scripts/download_data.py
+python scripts/ingest.py
+```
+
+### Step 3 — Deploy backend to Railway
+1. Go to https://railway.app → New Project → Deploy from GitHub
+2. Select `hh-goa-voice-rag` repo, set root directory to `backend/`
+3. Add environment variables (all from `.env`, with Qdrant Cloud values)
+4. Railway auto-detects the Dockerfile and deploys
+5. Note the Railway backend URL (e.g. `https://voice-rag-backend.up.railway.app`)
+
+### Step 4 — Deploy frontend to Vercel
+1. Go to https://vercel.com → New Project → Import from GitHub
+2. Select `hh-goa-voice-rag`, set root directory to `frontend/`
+3. Add environment variable: `NEXT_PUBLIC_API_URL=https://your-railway-backend-url`
+4. Deploy
+
+### Step 5 — Verify
+```
+GET https://your-railway-backend-url/health
+# Should return: {"status": "ok", "qdrant": "ok", ...}
+```
 
 ---
 
