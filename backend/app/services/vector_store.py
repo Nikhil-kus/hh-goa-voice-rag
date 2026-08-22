@@ -52,6 +52,7 @@ def get_client() -> QdrantClient:
             kwargs: Dict[str, Any] = {
                 "host": settings.qdrant_host,
                 "port": settings.qdrant_port,
+                "timeout": 60,
             }
             if settings.qdrant_api_key:
                 kwargs["api_key"] = settings.qdrant_api_key

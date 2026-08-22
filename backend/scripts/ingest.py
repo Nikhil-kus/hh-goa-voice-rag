@@ -55,8 +55,8 @@ LANG_TO_VAL_PREFIX: Dict[str, str] = {
     "ur": "urd", "sa": "san",
 }
 
-UPSERT_BATCH = 256
-EMBED_BATCH  = 64
+UPSERT_BATCH = 64   # smaller batches for Qdrant Cloud free tier
+EMBED_BATCH  = 32
 
 
 def iter_parquet(path: Path, max_records: int):
