@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+
+  qdrant:
+    image: qdrant/qdrant:v1.12.1
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./backend/qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__LOG_LEVEL=WARN
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - USE_QDRANT_LOCAL=false
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ./backend/data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy

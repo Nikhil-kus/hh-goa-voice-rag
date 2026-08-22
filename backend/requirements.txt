@@ -1,0 +1,37 @@
+# Core
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# Embedding
+sentence-transformers==3.3.1
+numpy==1.26.4  # pinned to match existing system numpy
+
+# Vector DB
+qdrant-client==1.12.1
+
+# Dataset
+datasets==3.2.0
+huggingface-hub==0.26.5
+
+# NLP / chunking
+nltk==3.9.1
+
+# LLM providers (modular — only the one you use needs a valid key)
+groq==0.13.0
+openai==1.57.2
+
+# HTTP
+httpx==0.28.1
+aiohttp==3.11.10
+
+# Benchmarking
+rouge-score==0.1.2
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+
+# Dev
+python-dotenv==1.0.1

@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Qdrant local storage (large — don't commit)
+backend/qdrant_data/
+backend/data/
+
+# Benchmark outputs (generated at runtime)
+backend/benchmark_*.json
+backend/benchmark_*.txt
+backend/ingestion_report.json
+backend/eval_queries.jsonl
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local
+
+# General
+.DS_Store
+*.log
+.pytest_cache/
